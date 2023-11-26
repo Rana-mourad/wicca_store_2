@@ -5,6 +5,7 @@ import 'package:wicca_store_2/views/homepage.dart';
 import 'package:wicca_store_2/views/landingpage.dart';
 import 'package:wicca_store_2/views/signin.dart';
 import 'package:wicca_store_2/views/signup.dart';
+import 'package:wicca_store_2/views/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.soraTextTheme(),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.orange),
       ),
-      home: isLoggedIn ? HomePage() : LandingPage(),
+      home: isLoggedIn ? SplashPage() : LandingPage(),
       routes: {
         "/home": (context) => HomePage(),
         "/signup": (context) => SignUpPage(),
