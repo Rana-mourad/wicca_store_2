@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wicca_store_2/views/homepage.dart';
 import 'package:wicca_store_2/views/signin.dart';
+import 'package:email_validator/email_validator.dart';
 
 void main() {
   runApp(
@@ -31,6 +32,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
   bool _isChecked = false;
 
   @override
@@ -51,41 +54,58 @@ class _SignUpPageState extends State<SignUpPage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Full Name',
-                  icon: Icon(Icons.person),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  icon: Icon(Icons.email),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  icon: Icon(Icons.lock),
-                ),
-                obscureText: true,
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  icon: Icon(Icons.phone),
-                ),
-                keyboardType: TextInputType.phone,
-              ),
-              SizedBox(height: 10.0),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Address',
-                  icon: Icon(Icons.location_on),
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Full Name',
+                        icon: Icon(Icons.person),
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Email Address',
+                        icon: Icon(Icons.email),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email is required';
+                        }
+                        if (!EmailValidator.validate(value)) {
+                          return 'Enter a valid Email';
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        icon: Icon(Icons.lock),
+                      ),
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Phone Number',
+                        icon: Icon(Icons.phone),
+                      ),
+                      keyboardType: TextInputType.phone,
+                    ),
+                    SizedBox(height: 10.0),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Address',
+                        icon: Icon(Icons.location_on),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20.0),
@@ -105,10 +125,12 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                  if (_validateForm()) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  }
                 },
                 child: Text('Sign Up'),
               ),
@@ -127,5 +149,25 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  bool _validateForm() {
+    if (!_isChecked) {
+      // Show a message or handle the case where the user hasn't agreed to receive offers.
+      return false;
+    }
+
+    if (formKey.currentState?.validate() ?? false) {
+      if (!EmailValidator.validate(emailController.text)) {
+        // Show a message or handle the case where the email is not valid.
+        return false;
+      }
+
+      // Other validation logic if needed.
+
+      return true;
+    }
+
+    return false;
   }
 }

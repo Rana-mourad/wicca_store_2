@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -23,38 +25,169 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int currentPosition = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('wicca'),
+        title: Text('Wicca Store'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Navigate to the cart page
+            },
+            icon: Icon(Icons.shopping_cart),
+          ),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ProductCard(
-              title: 'childern suit',
-              description: 'nice suit for girle childern.',
-              price: 19.99,
-              imageProvider: AssetImage('images/1.png'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              onPageChanged: (index, _) {
+                currentPosition = index;
+                setState(() {});
+              },
+              height: 200,
+              aspectRatio: 16 / 9,
+              viewportFraction: 0.8,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: true,
+              autoPlayInterval: Duration(seconds: 3),
+              autoPlayAnimationDuration: Duration(milliseconds: 800),
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.3,
+              scrollDirection: Axis.horizontal,
             ),
-            ProductCard(
-              title: 'GenZ shirt',
-              description: 'awesome t-shirt for local brand.',
-              price: 29.99,
-              imageProvider: AssetImage('images/2.png'),
+            items: [
+              ProductCard(
+                title: 'Special Offer',
+                description: 'Limited time offer!',
+                price: 49.99,
+                imageProvider: AssetImage('images/1.png'),
+              ),
+              ProductCard(
+                title: 'New Arrivals',
+                description: 'Explore our latest products.',
+                price: 39.99,
+                imageProvider: AssetImage('images/2.png'),
+              ),
+              ProductCard(
+                title: 'Best Sellers',
+                description: 'Discover our top-selling items.',
+                price: 59.99,
+                imageProvider: AssetImage('images/3.png'),
+              ),
+              ProductCard(
+                title: 'Fashion Collection',
+                description: 'Trendy styles for every occasion.',
+                price: 69.99,
+                imageProvider: AssetImage('images/1.png'),
+              ),
+              ProductCard(
+                title: 'Holiday Deals',
+                description: 'Celebrate with our special offers.',
+                price: 79.99,
+                imageProvider: AssetImage('images/6.png'),
+              ),
+            ].map((product) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image(
+                            image: product.imageProvider,
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          product.title,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          product.description,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Price: \$${product.price}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<CartProvider>().addToCart(
+                                  product.title,
+                                  product.price,
+                                );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.orange,
+                          ),
+                          child: Text('Add to Cart'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+          DotsIndicator(
+            dotsCount: 5,
+            position: currentPosition,
+            decorator: DotsDecorator(
+              size: const Size.square(9.0),
+              activeSize: const Size(18.0, 9.0),
+              activeShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              activeColor: Colors.orange,
             ),
-            ProductCard(
-              title: 'red chose',
-              description: 'Famous brand.',
-              price: 39.99,
-              imageProvider: AssetImage('images/6.png'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -75,33 +208,8 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image(
-              image: imageProvider,
-              height: 100,
-              width: 100,
-            ),
-            SizedBox(height: 8),
-            Text(description),
-            SizedBox(height: 8),
-            Text('Price: \$$price'),
-            SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                context.read<CartProvider>().addToCart(title, price);
-              },
-              child: Text('Add to Cart'),
-            ),
-          ],
-        ),
-      ),
-    );
+    return Container();
+    // Implement the content of the ProductCard if needed
   }
 }
 
