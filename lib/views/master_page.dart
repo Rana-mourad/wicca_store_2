@@ -15,9 +15,33 @@ class _MasterPageState extends State<MasterPage> {
 
   List<Widget> _pages = [
     HomePage(),
-    Text('Categories Page', style: TextStyle(color: Colors.white)),
-    Text('Profile Page', style: TextStyle(color: Colors.white)),
-    Text('Cart Page', style: TextStyle(color: Colors.white)),
+    Container(
+      color: Colors.orange,
+      child: Center(
+        child: Text(
+          'Categories Page',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
+    Container(
+      color: Colors.orange,
+      child: Center(
+        child: Text(
+          'Profile Page',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
+    Container(
+      color: Colors.orange,
+      child: Center(
+        child: Text(
+          'Cart Page',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
   ];
 
   @override
@@ -30,7 +54,7 @@ class _MasterPageState extends State<MasterPage> {
             _selectedIndex = index;
           });
         },
-        backgroundColor: Colors.orange, // Set to your desired color
+        backgroundColor: Colors.orange,
         elevation: 8,
         gapLocation: GapLocation.none,
         notchSmoothness: NotchSmoothness.smoothEdge,
@@ -51,7 +75,7 @@ class _MasterPageState extends State<MasterPage> {
                             ? LineIcons.user
                             : LineIcons.shoppingCart,
                 size: 30,
-                color: isActive ? Colors.white : Colors.yellow,
+                color: isActive ? Colors.white : Colors.white,
               ),
               Text(
                 index == 0
@@ -62,7 +86,7 @@ class _MasterPageState extends State<MasterPage> {
                             ? 'Profile'
                             : 'Cart',
                 style: TextStyle(
-                  color: isActive ? Colors.white : Colors.yellow,
+                  color: isActive ? Colors.white : Colors.white,
                 ),
               ),
             ],
@@ -71,7 +95,7 @@ class _MasterPageState extends State<MasterPage> {
       ),
       appBar: AppBar(
         title: Text(
-          'Lets shopping ',
+          'Let\'s Have Shopping',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.orange,
