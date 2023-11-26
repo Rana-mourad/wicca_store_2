@@ -71,7 +71,7 @@ class _MasterPageState extends State<MasterPage> {
       ),
       appBar: AppBar(
         title: Text(
-          'Let shopping ',
+          'Lets shopping ',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.orange,
